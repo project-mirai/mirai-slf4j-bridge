@@ -18,6 +18,20 @@ Mirai 是一个在全平台下运行，提供 QQ 协议支持的高效率机器�
 SLF4J with [mirai] 的连接桥实现,
 主要桥接 SLF4J 日志系统到 [mirai] 日志系统
 
+## Download
+[ ![Download](https://api.bintray.com/packages/karlatemp/mirai/mirai-slf4j-bridge/images/download.svg?) ](https://bintray.com/karlatemp/mirai/mirai-slf4j-bridge/link)
 
+## Use
+
+### Mirai Console
+
+#### 命令行启动
+将下载的 `mirai-slf4j-bridge.jar` 放入 `libs` 即可 (最佳做法)
+
+#### 其他模式
+将下载的 `mirai-slf4j-bridge` 放入 `plugins` 即可
+
+### 基于 core 的应用
+打包应用时携带 `mirai-slf4j-bridge` 即可
 
 [mirai]: https://github.com/mamoe/mirai
