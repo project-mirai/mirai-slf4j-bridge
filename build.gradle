@@ -1,0 +1,89 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version '1.4.10'
+    id 'org.jetbrains.kotlin.kapt' version '1.4.10'
+    id 'com.jfrog.bintray' version '1.8.5'
+    id("maven-publish")
+}
+
+group 'net.mamoe'
+version project.property("project.version")
+
+repositories {
+    mavenLocal()
+    jcenter()
+    mavenCentral()
+}
+
+dependencies {
+    def compileAndTest = { dep ->
+        compileOnly dep
+        testCompile dep
+    }
+
+    def autoService = '1.0-rc7'
+    kapt "com.google.auto.service:auto-service:$autoService"
+    compileOnly "com.google.auto.service:auto-service-annotations:$autoService"
+
+    compileAndTest "org.jetbrains.kotlin:kotlin-stdlib"
+    compileAndTest("net.mamoe:mirai-core:" + project.property("mirai.version"))
+    compileAndTest group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.13.3'
+    // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-slf4j-impl
+    testCompile group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: '2.13.3'
+
+    // For console plugin mode.
+    // 修改 static final 必须使用 Unsafe
+    compile('io.github.karlatemp:unsafe-accessor:' + project.property("unsafe-accessor.version"))
+    compileOnly('net.mamoe:mirai-console:' + project.property("mirai-console.version"))
+}
+
+jar {
+    from { configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) } }
+}
+
+task sourceJar(type: Jar) {
+    archiveClassifier.set("sources")
+    from(sourceSets.main.allSource)
+
+}
+
+bintray {
+    user = project.findProperty("bintray.user") ?: System.getenv("USERNAME")
+    key = project.findProperty('bintray.key') ?: System.getenv("BINTRAY_TOKEN")
+    publications = ['mavenPublication']
+
+    pkg {
+        repo = 'mirai'
+        name = project.name
+        licenses = ['AGPLv3']
+        vcsUrl = 'https://github.com/project-mirai/mirai-slf4j-bridge.git'
+        version {
+            name = project.version
+            desc = project.version
+            released = new Date()
+        }
+    }
+}
+
+publishing {
+    publications {
+        mavenPublication(MavenPublication) {
+            from(components.java)
+            artifact sourceJar
+            pom {
+                name = 'mirai-slf4j-bridge'
+                description = 'Binding slf4j to mirai logging system'
+                url = 'https://github.com/project-mirai/mirai-slf4j-bridge'
+            }
+            pom.withXml {
+                Node pomNode = asNode()
+                // 只有一个 io.github.karlatemp:unsafe-accessor:1.2.0
+                // jar 已经携带 unsafe-accessor, 在 pom.xml 再附带显得多余
+                pomNode.dependencies.'*'.findAll() {
+                    true
+                }.each() {
+                    it.parent().remove(it)
+                }
+            }
+        }
+    }
+}
