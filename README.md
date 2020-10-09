@@ -34,4 +34,17 @@ SLF4J with [mirai] 的连接桥实现,
 ### 基于 core 的应用
 打包应用时携带 `mirai-slf4j-bridge` 即可
 
+```xml
+<dependency>
+	<groupId>net.mamoe</groupId>
+	<artifactId>mirai-slf4j-bridge</artifactId>
+	<version>1.0.0</version> <!-- 替换为最新版本 -->
+</dependency>
+```
+
+```groovy
+implementation 'net.mamoe:mirai-slf4j-bridge:1.0.0' // 替换为最新版本
+```
+
+
 [mirai]: https://github.com/mamoe/mirai
