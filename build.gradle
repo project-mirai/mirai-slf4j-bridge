@@ -54,7 +54,7 @@ bintray {
     pkg {
         repo = 'mirai'
         name = project.name
-        licenses = ['AGPLv3']
+        licenses = ['AGPL-v3']
         vcsUrl = 'https://github.com/project-mirai/mirai-slf4j-bridge.git'
         version {
             name = project.version
