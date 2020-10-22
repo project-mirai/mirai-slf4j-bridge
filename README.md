@@ -26,10 +26,11 @@ SLF4J with [mirai] 的连接桥实现,
 ### Mirai Console
 
 #### 命令行启动
-将下载的 `mirai-slf4j-bridge.jar` 放入 `libs` 即可 (最佳做法)
+
+请把 `mirai-slf4j-bridge.jar` 放入 `plugins` 中
 
 #### 其他模式
-将下载的 `mirai-slf4j-bridge` 放入 `plugins` 即可
+将下载的 `mirai-slf4j-bridge.jar` 放入 `plugins` 即可
 
 ### 基于 core 的应用
 打包应用时携带 `mirai-slf4j-bridge` 即可
