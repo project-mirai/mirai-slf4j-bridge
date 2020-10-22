@@ -14,23 +14,72 @@ import net.mamoe.mirai.utils.MiraiLogger
 import org.apache.logging.log4j.message.ParameterizedMessage
 import org.slf4j.Logger
 import org.slf4j.Marker
+import java.nio.CharBuffer
 import java.text.MessageFormat
 import java.util.regex.Pattern
 
-@Suppress("RemoveRedundantSpreadOperator")
+@Suppress("RemoveRedundantSpreadOperator", "RegExpRedundantEscape")
 internal class MiraiLoggerSlf4jBridge(
     private val logger: MiraiLogger
 ) : Logger {
     // Copied from Log4J
-    private companion object {
+    internal companion object {
         private const val FORMAT_SPECIFIER = "%(\\d+\\$)?([-#+ 0,(\\<]*)?(\\d+)?(\\.\\d+)?([tT])?([a-zA-Z%])"
-        private val MSG_PATTERN = Pattern.compile(FORMAT_SPECIFIER)
 
-        private fun String.format1(vararg arguments: Any?): String = format2(arguments)
-        private fun String.format2(args: Array<out Any?>): String {
+        private val MSG_PATTERN = Pattern.compile(FORMAT_SPECIFIER)
+        private const val DELIM_START = '{'
+        private const val DELIM_STOP = '}'
+        private const val ESCAPE_CHAR = '\\'
+
+        @JvmStatic
+        internal fun String.simpleFormat(args: Array<out Any?>): String {
+            val buffer = StringBuilder()
+            val reader = CharBuffer.wrap(this)
+            var isEscape = false
+            var index = 0
+            while (reader.hasRemaining()) {
+                when (val next = reader.get()) {
+                    ESCAPE_CHAR -> {
+                        if (isEscape) {
+                            buffer.append(ESCAPE_CHAR)
+                        }
+                        isEscape = !isEscape
+                    }
+                    DELIM_START -> {
+                        if (isEscape) {
+                            buffer.append(next)
+                        } else {
+                            if (reader.hasRemaining()) {
+                                if (reader.get(reader.position()) == DELIM_STOP) {
+                                    reader.get()
+                                    buffer.append(args.getOrNull(index))
+                                    index++
+                                } else {
+                                    buffer.append(DELIM_START)
+                                }
+                            } else {
+                                buffer.append(DELIM_START)
+                            }
+                        }
+                        isEscape = false
+                    }
+                    else -> buffer.append(next).also { isEscape = false }
+                }
+            }
+            return buffer.toString()
+        }
+
+        internal fun String.format1(vararg arguments: Any?): String = format2(arguments)
+
+        @JvmStatic
+        internal fun String.format2(args: Array<out Any?>): String {
             // Copied from Log4J
             kotlin.runCatching {
-                return MessageFormat(this).format(args)
+                val formatter = MessageFormat(this)
+                val formats = formatter.formats
+                if (formats.isNotEmpty()) {
+                    return formatter.format(args)
+                }
             }
             kotlin.runCatching {
                 if (MSG_PATTERN.matcher(this).find()) {
@@ -41,7 +90,7 @@ internal class MiraiLoggerSlf4jBridge(
                 // Try format with Log4J
                 return ParameterizedMessage(this, *args).formattedMessage
             }
-            return this
+            return simpleFormat(args)
         }
     }
 
