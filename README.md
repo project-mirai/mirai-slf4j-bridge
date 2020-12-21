@@ -25,6 +25,12 @@ SLF4J with [mirai] 的连接桥实现,
 
 ### Mirai Console
 
+## 使用 [Mirai Console Loader](https://github.com/iTXTech/mirai-console-loader) 安装`Mirai Slf4j Bridge`
+
+* `MCL` 支持自动更新插件，支持设置插件更新频道等功能
+
+`./mcl --update-package net.mamoe:mirai-slf4j-bridge --set-channel stable --set-type plugins`
+
 #### 命令行启动
 
 请把 `mirai-slf4j-bridge.jar` 放入 `plugins` 中
