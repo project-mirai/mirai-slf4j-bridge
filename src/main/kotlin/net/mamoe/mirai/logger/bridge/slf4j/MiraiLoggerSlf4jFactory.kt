@@ -10,12 +10,12 @@
 
 package net.mamoe.mirai.logger.bridge.slf4j
 
-import net.mamoe.mirai.utils.DefaultLogger
+import net.mamoe.mirai.utils.MiraiLogger
 import org.slf4j.ILoggerFactory
 import org.slf4j.Logger
 
 internal object MiraiLoggerSlf4jFactory : ILoggerFactory {
     override fun getLogger(name: String?): Logger = MiraiLoggerSlf4jBridge(
-        DefaultLogger(name)
+        MiraiLogger.create(name)
     )
 }
