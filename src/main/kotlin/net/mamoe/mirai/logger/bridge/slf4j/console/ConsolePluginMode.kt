@@ -23,8 +23,9 @@ import org.slf4j.LoggerFactory
 @AutoService(JvmPlugin::class)
 internal object ConsolePluginMode : KotlinPlugin(
     // JvmPluginDescriptionBuilder 在 1.0-M4 到 1.0-RC-dev? 都工作
-    JvmPluginDescriptionBuilder(name = "mirai-slf4j-bridge", version = "1.0.0")
+    JvmPluginDescriptionBuilder(id = "net.mamoe.mirai.mirai-slf4j-bridge", version = "1.0.0")
         .id("net.mamoe.mirai.mirai-slf4j-bridge")
+        .name("mirai-slf4j-bridge")
         .author("Karlatemp")
         .build()
 ) {

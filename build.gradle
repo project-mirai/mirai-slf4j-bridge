@@ -1,7 +1,7 @@
 plugins {
-    id 'org.jetbrains.kotlin.jvm' version '1.4.10'
-    id 'org.jetbrains.kotlin.kapt' version '1.4.10'
-    id 'com.jfrog.bintray' version '1.8.5'
+    id("net.mamoe.maven-central-publish") version "0.3.1"
+    id 'org.jetbrains.kotlin.jvm' version '1.4.21'
+    id 'org.jetbrains.kotlin.kapt' version '1.4.21'
     id("maven-publish")
 }
 
@@ -10,7 +10,6 @@ version project.property("project.version")
 
 repositories {
     mavenLocal()
-    jcenter()
     mavenCentral()
 }
 
@@ -48,46 +47,4 @@ task sourceJar(type: Jar) {
     archiveClassifier.set("sources")
     from(sourceSets.main.allSource)
 
-}
-
-bintray {
-    user = project.findProperty("bintray.user") ?: System.getenv("USERNAME")
-    key = project.findProperty('bintray.key') ?: System.getenv("BINTRAY_TOKEN")
-    publications = ['mavenPublication']
-
-    pkg {
-        repo = 'mirai'
-        name = project.name
-        licenses = ['AGPL-v3']
-        vcsUrl = 'https://github.com/project-mirai/mirai-slf4j-bridge.git'
-        version {
-            name = project.version
-            desc = project.version
-            released = new Date()
-        }
-    }
-}
-
-publishing {
-    publications {
-        mavenPublication(MavenPublication) {
-            from(components.java)
-            artifact sourceJar
-            pom {
-                name = 'mirai-slf4j-bridge'
-                description = 'Binding slf4j to mirai logging system'
-                url = 'https://github.com/project-mirai/mirai-slf4j-bridge'
-            }
-            pom.withXml {
-                Node pomNode = asNode()
-                // 只有一个 io.github.karlatemp:unsafe-accessor:1.2.0
-                // jar 已经携带 unsafe-accessor, 在 pom.xml 再附带显得多余
-                pomNode.dependencies.'*'.findAll() {
-                    true
-                }.each() {
-                    it.parent().remove(it)
-                }
-            }
-        }
-    }
 }
