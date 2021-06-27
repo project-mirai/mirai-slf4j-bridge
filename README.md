@@ -29,7 +29,7 @@ SLF4J with [mirai] 的连接桥实现,
 
 * `MCL` 支持自动更新插件，支持设置插件更新频道等功能
 
-`./mcl --update-package net.mamoe:mirai-slf4j-bridge --set-channel stable --set-type plugins`
+`./mcl --update-package net.mamoe:mirai-slf4j-bridge --channel stable --type plugin`
 
 #### 命令行启动
 
