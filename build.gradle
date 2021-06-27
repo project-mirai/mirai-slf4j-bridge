@@ -48,3 +48,9 @@ task sourceJar(type: Jar) {
     from(sourceSets.main.allSource)
 
 }
+
+mavenCentralPublish {
+    githubProject("project-mirai", "mirai-login-slf4j-bridge")
+    licenseFromGitHubProject("Apache-2.0", "master")
+    developer("Karlatemp", "Karlatemp", "karlatemp@vip.qq.com")
+}
