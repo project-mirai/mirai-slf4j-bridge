@@ -1,8 +1,8 @@
 plugins {
-    id("net.mamoe.maven-central-publish") version "0.3.1"
     id 'org.jetbrains.kotlin.jvm' version '1.4.21'
     id 'org.jetbrains.kotlin.kapt' version '1.4.21'
     id("maven-publish")
+    id("net.mamoe.maven-central-publish") version "0.5.0"
 }
 
 group 'net.mamoe'
