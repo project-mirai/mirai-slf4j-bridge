@@ -19,7 +19,7 @@ SLF4J with [mirai] 的连接桥实现,
 主要桥接 SLF4J 日志系统到 [mirai] 日志系统
 
 ## Download
-[ ![Download](https://api.bintray.com/packages/karlatemp/mirai/mirai-slf4j-bridge/images/download.svg?) ](https://bintray.com/karlatemp/mirai/mirai-slf4j-bridge/)
+[![Download](https://img.shields.io/maven-central/v/net.mamoe/mirai-slf4j-bridge)](https://repo1.maven.org/maven2/net/mamoe/mirai-slf4j-bridge/)
 
 ## Use
 
